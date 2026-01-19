@@ -85,6 +85,37 @@ canvas#particles{
     z-index:0;
     pointer-events: none;
 }
+
+/* ---- Réalisateurs simplifiés ---- */
+#realisateurs{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    padding: 0 20px;
+}
+
+#realisateurs .left p,
+#realisateurs .right p{
+    color: #ffd700; /* couleur dorée */
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    font-size: 16px;
+    line-height: 1.5;
+    font-weight: 500;
+    margin:0;
+}
+
+#realisateurs .left{
+    text-align: left;
+}
+
+#realisateurs .right{
+    text-align: right;
+}
+
+#realisateurs .title{
+    text-decoration: underline; /* souligné */
+    font-weight: bold;
+}
 </style>
 </head>
 
@@ -98,6 +129,16 @@ canvas#particles{
 
 <canvas id="canvas"></canvas>
 <canvas id="particles"></canvas>
+
+<!-- Réalisateurs -->
+<div id="realisateurs">
+    <div class="left">
+        <p><span class="title">Le graphiste :</span> AKINROME<br>(+229 01 91 19 39 29)</p>
+    </div>
+    <div class="right">
+        <p><span class="title">Le développeur web :</span> Bernard Olawalé ADEYEMI<br>(+229 01 65 79 89 42)</p>
+    </div>
+</div>
 
 <script>
 // ----------------------
@@ -203,7 +244,14 @@ function download(){
     const a = document.createElement("a");
     a.download = "affiche_JEL_2026.png";
     a.href = canvas.toDataURL("image/png");
-    a.click();
+
+    // Vérifier si mobile
+    const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+    if(!isMobile){
+        a.click(); // Desktop → téléchargement automatique
+    } else {
+        window.open(a.href, "_blank"); // Mobile → ouvrir dans un nouvel onglet
+    }
 }
 
 // ----------------------
@@ -251,4 +299,4 @@ window.addEventListener('resize',()=>{
 </script>
 
 </body>
-</html>
+    </html>
