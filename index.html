@@ -6,23 +6,20 @@
 <title>Affiche personnalisée</title>
 
 <style>
-/* ---- Corps de la page ---- */
 body{
     margin:0;
     padding:15px;
     font-family: Arial, sans-serif;
     text-align:center;
-
-    /* Image en arrière-plan */
-    background-image: url('logocedal.jpg');
+    position: relative;
+    overflow: hidden;
+    background-image: url('logocedal.jpg'); /* ton arrière-plan */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    position: relative;
-    overflow: hidden;
 }
 
-/* Overlay semi-transparent pour contraste */
+/* Overlay pour contraste */
 body::before{
     content: "";
     position: fixed;
@@ -34,14 +31,13 @@ body::before{
     z-index:-1;
 }
 
-/* Titre */
 h3{
     margin-bottom:20px;
     color:#fff;
     text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
 }
 
-/* ---- Canvas ---- */
+/* Canvas */
 canvas#canvas{
     width:100%;
     max-width:420px;
@@ -49,11 +45,9 @@ canvas#canvas{
     box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     border-radius: 20px;
     margin-bottom: 20px;
-    position: relative;
-    z-index:1;
 }
 
-/* ---- Boutons ---- */
+/* Boutons */
 input, button{
     margin:10px;
     padding:12px 18px;
@@ -75,18 +69,7 @@ button:hover{
     box-shadow: 0 8px 20px rgba(0,0,0,0.3);
 }
 
-/* ---- Particules Canvas ---- */
-canvas#particles{
-    position: fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    z-index:0;
-    pointer-events: none;
-}
-
-/* ---- Réalisateurs simplifiés ---- */
+/* Réalisateurs */
 #realisateurs{
     display: flex;
     justify-content: space-between;
@@ -96,7 +79,7 @@ canvas#particles{
 
 #realisateurs .left p,
 #realisateurs .right p{
-    color: #ffd700; /* couleur dorée */
+    color: #ffd700; 
     text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
     font-size: 16px;
     line-height: 1.5;
@@ -104,16 +87,10 @@ canvas#particles{
     margin:0;
 }
 
-#realisateurs .left{
-    text-align: left;
-}
-
-#realisateurs .right{
-    text-align: right;
-}
-
+#realisateurs .left{text-align:left;}
+#realisateurs .right{text-align:right;}
 #realisateurs .title{
-    text-decoration: underline; /* souligné */
+    text-decoration: underline;
     font-weight: bold;
 }
 </style>
@@ -128,9 +105,8 @@ canvas#particles{
 <button onclick="download()">Télécharger</button>
 
 <canvas id="canvas"></canvas>
-<canvas id="particles"></canvas>
 
-<!-- Réalisateurs -->
+<!-- Noms des réalisateurs (juste pour le site, pas dans l'image) -->
 <div id="realisateurs">
     <div class="left">
         <p><span class="title">Le graphiste :</span> AKINROME<br>(+229 01 91 19 39 29)</p>
@@ -141,20 +117,10 @@ canvas#particles{
 </div>
 
 <script>
-// ----------------------
-// CONFIGURATION DU CANVAS AFFICHE
-// ----------------------
+// ---- CONFIG CANVAS ----
 const AFFICHE_WIDTH = 1080;
 const AFFICHE_HEIGHT = 1080;
-
-// Cadre photo
-const frame = {
-    x: 620,
-    y: 305,
-    w: 315,
-    h: 380,
-    radius: 40
-};
+const frame = {x:620, y:305, w:315, h:380, radius:40};
 
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
@@ -163,22 +129,17 @@ canvas.height = AFFICHE_HEIGHT;
 
 // Chargement de l'affiche
 const affiche = new Image();
-affiche.src = "affiche.jpg";
+affiche.src = "affiche.jpg"; // ton fichier affiche.jpg dans le même dossier
 
-affiche.onload = () => {
-    ctx.drawImage(affiche, 0, 0, AFFICHE_WIDTH, AFFICHE_HEIGHT);
-};
-
-// Variables
 let userPhoto = null;
 
 // Ajouter photo
-document.getElementById("photoInput").addEventListener("change", e => {
+document.getElementById("photoInput").addEventListener("change", e=>{
     const file = e.target.files[0];
     if(!file) return;
 
     const img = new Image();
-    img.onload = () => {
+    img.onload = ()=>{
         userPhoto = img;
         redrawCanvas();
     };
@@ -186,7 +147,7 @@ document.getElementById("photoInput").addEventListener("change", e => {
 });
 
 // Dessin cadre arrondi
-function drawRoundedRect(ctx, x, y, w, h, r){
+function drawRoundedRect(ctx,x,y,w,h,r){
     ctx.beginPath();
     ctx.moveTo(x+r, y);
     ctx.lineTo(x+w-r, y);
@@ -200,28 +161,26 @@ function drawRoundedRect(ctx, x, y, w, h, r){
     ctx.closePath();
 }
 
-// Redessiner tout
+// Redessiner
 function redrawCanvas(){
-    ctx.clearRect(0,0,canvas.width, canvas.height);
-    ctx.drawImage(affiche, 0, 0, AFFICHE_WIDTH, AFFICHE_HEIGHT);
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.drawImage(affiche,0,0,AFFICHE_WIDTH,AFFICHE_HEIGHT);
 
-    // Photo avec coins arrondis
     if(userPhoto){
-        const rImg = userPhoto.width / userPhoto.height;
-        const rFrame = frame.w / frame.h;
-
+        const rImg = userPhoto.width/userPhoto.height;
+        const rFrame = frame.w/frame.h;
         let drawW, drawH, drawX, drawY;
 
-        if(rImg > rFrame){
-            drawH = frame.h;
-            drawW = drawH * rImg;
-            drawX = frame.x - (drawW - frame.w)/2;
-            drawY = frame.y;
+        if(rImg>rFrame){
+            drawH=frame.h;
+            drawW=drawH*rImg;
+            drawX=frame.x-(drawW-frame.w)/2;
+            drawY=frame.y;
         } else {
-            drawW = frame.w;
-            drawH = drawW / rImg;
-            drawX = frame.x;
-            drawY = frame.y - (drawH - frame.h)/2;
+            drawW=frame.w;
+            drawH=drawW/rImg;
+            drawX=frame.x;
+            drawY=frame.y-(drawH-frame.h)/2;
         }
 
         ctx.save();
@@ -232,71 +191,21 @@ function redrawCanvas(){
     }
 
     // Filigrane
-    ctx.fillStyle = "rgba(0,0,0,0.2)";
-    ctx.font = "bold 30px Arial";
-    ctx.textAlign = "right";
-    ctx.fillText("JEL 2026", canvas.width - 20, canvas.height - 20);
+    ctx.fillStyle="rgba(0,0,0,0.2)";
+    ctx.font="bold 30px Arial";
+    ctx.textAlign="right";
+    ctx.fillText("JEL 2026", canvas.width-20, canvas.height-20);
 }
 
 // Télécharger
 function download(){
     redrawCanvas();
-    const a = document.createElement("a");
-    a.download = "affiche_JEL_2026.png";
-    a.href = canvas.toDataURL("image/png");
-
-    // Vérifier si mobile
-    const isMobile = /Mobi|Android/i.test(navigator.userAgent);
-    if(!isMobile){
-        a.click(); // Desktop → téléchargement automatique
-    } else {
-        window.open(a.href, "_blank"); // Mobile → ouvrir dans un nouvel onglet
-    }
+    const a=document.createElement("a");
+    a.download="affiche_JEL_2026.png";
+    a.href=canvas.toDataURL("image/png");
+    a.click(); // fonctionne partout
 }
-
-// ----------------------
-// PARTICULES EN ARRIÈRE-PLAN
-// ----------------------
-const particleCanvas = document.getElementById("particles");
-const pCtx = particleCanvas.getContext("2d");
-particleCanvas.width = window.innerWidth;
-particleCanvas.height = window.innerHeight;
-
-const particles = [];
-for(let i=0;i<80;i++){
-    particles.push({
-        x: Math.random()*particleCanvas.width,
-        y: Math.random()*particleCanvas.height,
-        r: Math.random()*3 + 1,
-        dx: (Math.random()-0.5)/2,
-        dy: (Math.random()-0.5)/2
-    });
-}
-
-function drawParticles(){
-    pCtx.clearRect(0,0,particleCanvas.width, particleCanvas.height);
-    particles.forEach(p=>{
-        pCtx.beginPath();
-        pCtx.arc(p.x, p.y, p.r, 0, Math.PI*2);
-        pCtx.fillStyle = "rgba(255,255,255,0.7)";
-        pCtx.fill();
-        p.x += p.dx;
-        p.y += p.dy;
-        if(p.x<0) p.x=particleCanvas.width;
-        if(p.x>particleCanvas.width) p.x=0;
-        if(p.y<0) p.y=particleCanvas.height;
-        if(p.y>particleCanvas.height) p.y=0;
-    });
-    requestAnimationFrame(drawParticles);
-}
-drawParticles();
-
-// Ajuster taille particules si redimension de fenêtre
-window.addEventListener('resize',()=>{
-    particleCanvas.width = window.innerWidth;
-    particleCanvas.height = window.innerHeight;
-});
 </script>
 
 </body>
-    </html>
+</html>
